@@ -1,19 +1,28 @@
 import numpy as np 
-import scipy
-import scipy.spatial as spat
 from matplotlib import pyplot as plt
 from polygon_generator import polygon2D
+from triangulation import convex_polygon_triangulation
 from scipy.spatial import Delaunay
-np.random.seed(5)
+from scipy.spatial import ConvexHull
+import random
+random.seed(0)
 
 
-polygon_obj = polygon2D() # hardcoded for the moment
+polygon_obj = polygon2D(5,5) # n= number of corner, r = distance from (0,0)
 #returs a shapely.geometry.polygon.Polygon
-print(type(polygon_obj))
 
+corners = np.array(polygon_obj.exterior) # for plotting
+#print(corners)
 
-corners = np.array(polygon_obj.exterior)
+tri = convex_polygon_triangulation(corners)
 
+#plotting
+fig1 = plt.figure()
+fig1.add_subplot(211)
+plt.plot(*polygon_obj.exterior.xy)
 
-
+fig1.add_subplot(212)
+plt.triplot(corners[:,0],corners[:,1],tri.simplices)
+plt.scatter(corners[:,0],corners[:,1],c='r')
+plt.show()
 
