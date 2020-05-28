@@ -1,9 +1,8 @@
-import numpy as np 
-import scipy
+import numpy as np
+import shapely
+import shapely.geometry
+from shapely.geometry import Polygon
 
-def polygon2D(n,r):
-    # n = number of vertices
-    # r = range = max distance from (0,0,0)
-    vertices = np.round(r*np.random.rand(2,n),2)
-    return vertices
-
+def polygon2D():
+    polygon_obj = Polygon([[0,0],[1,0],[1,1],[0,1]])
+    return polygon_obj
