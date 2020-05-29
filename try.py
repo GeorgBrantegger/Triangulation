@@ -86,7 +86,24 @@ print(vertices) """
 
 
 triangles_right = np.zeros([2*num_triangles,3,num_dim])
-print(np.shape(triangles_right))
+
+""" print(np.shape(triangles_right))
+print(np.shape(base_points))
+print(np.shape(vertices))
+print(np.shape(points_longest_edges))
+
+print(triangles_right[0])
+print(base_points[0,0])
+print(vertices[0,0])
+print(points_longest_edges[0,0]) """
+
+for i in range(num_triangles):
+    #print([2*i,2*i+1])
+    triangles_right[2*i] = np.vstack((base_points[i,0],vertices[i,0],points_longest_edges[i,0]))
+    triangles_right[2*i+1] = np.vstack((base_points[i],vertices[i],points_longest_edges[i,1]))
+
+print(type(triangles_right))
+
 
 
 
@@ -100,11 +117,12 @@ axs2.triplot(corners[:,0],corners[:,1],tri.simplices)
 axs2.scatter(corners[:,0],corners[:,1],c='r')
 axs2.scatter(base_points[:,0,0],base_points[:,0,1],c='k')
 axs2.axis('equal')
-#plt.show()
+plt.show()
 
 
-""" fig3, axs3 = plt.subplots()
-axs3.triplot(corners_new[:,0],corners_new[:,1],tri2.simplices)
-axs3.scatter(corners_new[:,0],corners_new[:,1],c='r')
+fig3, axs3 = plt.subplots()
+for i in range(2*num_triangles):
+    axs3.plot(triangles_right[i,:,0],triangles_right[i,:,1])
+
 axs3.axis('equal')
-plt.show() """
+plt.show()
