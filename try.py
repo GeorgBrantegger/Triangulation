@@ -2,18 +2,21 @@ import numpy as np
 from matplotlib import pyplot as plt
 from polygon_generator import polygon2D
 from triangulation import convex_polygon_triangulation
-from scipy.spatial import Delaunay
-from scipy.spatial import ConvexHull
+from scipy.spatial import Delaunay #ignore linting problem "no name 'Delaunay' in module ..."
+from scipy.spatial import ConvexHull #ignore linting problem "no name 'ConvexHull' in module ..."
 import random
 import math
-random.seed(42)
+random.seed(5)
 
 
 polygon_obj = polygon2D(8,10) # n= number of corner, r = distance from (0,0)
 #returs a shapely.geometry.polygon.Polygon
+#5,8 for a concave polygon see random radius in polygon_generator
 
 corners = np.array(polygon_obj.exterior) # for plotting
 #print(corners)
+
+convex_hull = ConvexHull(corners)
 
 tri = convex_polygon_triangulation(corners)
 #####################################################################
@@ -87,22 +90,14 @@ print(vertices) """
 
 triangles_right = np.zeros([2*num_triangles,3,num_dim])
 
-""" print(np.shape(triangles_right))
-print(np.shape(base_points))
-print(np.shape(vertices))
-print(np.shape(points_longest_edges))
 
-print(triangles_right[0])
-print(base_points[0,0])
-print(vertices[0,0])
-print(points_longest_edges[0,0]) """
 
 for i in range(num_triangles):
     #print([2*i,2*i+1])
     triangles_right[2*i] = np.vstack((base_points[i,0],vertices[i,0],points_longest_edges[i,0]))
     triangles_right[2*i+1] = np.vstack((base_points[i],vertices[i],points_longest_edges[i,1]))
 
-print(type(triangles_right))
+#print(triangles_right)
 
 
 
@@ -117,12 +112,11 @@ axs2.triplot(corners[:,0],corners[:,1],tri.simplices)
 axs2.scatter(corners[:,0],corners[:,1],c='r')
 axs2.scatter(base_points[:,0,0],base_points[:,0,1],c='k')
 axs2.axis('equal')
-plt.show()
-
 
 fig3, axs3 = plt.subplots()
 for i in range(2*num_triangles):
-    axs3.plot(triangles_right[i,:,0],triangles_right[i,:,1])
+    axs3.triplot(triangles_right[i,:,0],triangles_right[i,:,1])
+    axs3.scatter(triangles_right[i,:,0],triangles_right[i,:,1],c='k')
 
 axs3.axis('equal')
 plt.show()
